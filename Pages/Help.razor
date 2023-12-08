@@ -1,0 +1,52 @@
+﻿@page "/help"
+
+<PageTitle>C-Coffee - Help</PageTitle>
+
+<MudText Typo="Typo.h4">
+	Scopo del gioco
+</MudText>
+<MudText>
+	Cercare di NON indovinare, per tutta la durata del gioco, il numero segreto scelto dal banco ad inizio partita.
+</MudText>
+
+<MudText Typo="Typo.h4">
+	Svolgimento
+</MudText>
+<MudList>
+	<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		il banco sceglie un numero segreto da 1 a 1000, estremi esclusi (es: "890" )
+	</MudListItem>
+	<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		il primo giocatore scommette con un numero da 1 a 1000, estremi esclusi (es: "300")
+	</MudListItem>
+	<MudListItem Text="il banco controlla il numero segreto:" InitiallyExpanded="true" Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		<NestedList>
+			<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+				se il giocatore ha indovinato, questi ha perso ed il gioco termina
+			</MudListItem>
+			<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+				altrimenti il banco rivela se il numero scommesso è minore o maggiore del numero segreto (es: "il numero segreto è maggiore di 300")
+			</MudListItem>
+		</NestedList>
+	</MudListItem>
+	<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		il banco aggiorna il limite minimo e massimo (es: "da 300 a 1000")
+	</MudListItem>
+	<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		adesso è il turno del secondo giocatore, che dovrà scommettere con un nuovo numero, all'interno dell'intervallo appena aggiornato
+	</MudListItem>
+	<MudListItem Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+		il gioco termina quando un giocatore indovina il numero segreto, perdendo la partita... dovrà quindi offrire il caffè a tutti!
+	</MudListItem>
+</MudList>
+
+<MudButton Href="/" Color="Color.Primary" Variant="Variant.Filled">Play</MudButton>
+
+@code {
+	private int currentCount = 0;
+
+	private void IncrementCount()
+	{
+		currentCount++;
+	}
+}
