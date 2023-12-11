@@ -1,0 +1,22 @@
+﻿@switch (_game.Status)
+{
+    case Status.New:
+        <Setup OnStart="_game.Start" />
+        break;
+
+    case Status.Ongoing:
+        <Match Players="_game.Players" Limits="_game.Limits" CheckFunc="_game.Check" End="_game.End" />
+        break;
+
+    case Status.Ended:
+        <End Loser="_game.Loser" />
+        break;
+
+    default:
+        break;
+}
+
+
+@code {
+    private Game _game = new Game();
+}

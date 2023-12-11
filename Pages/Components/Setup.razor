@@ -1,0 +1,44 @@
+﻿<MudForm @bind-IsValid="@_isValid">
+    <MudExpansionPanels>
+        <MudExpansionPanel HideIcon="true" @bind-IsExpanded="_isMultiPlayer">
+            <TitleContent>
+                <MudToolBar>
+                    <MudSwitch Color="Color.Primary" @bind-Checked="_isMultiPlayer" Label="Modalità Multiplayer" />
+                </MudToolBar>
+            </TitleContent>
+            <ChildContent>
+                @if (_isMultiPlayer)
+                {
+                    int i = 1;
+                    @foreach (var player in _players)
+                    {
+                        <MudTextField @bind-Value="player.Name"
+                                      Required="true"
+                                      Label="@($"Player #{i}")"
+                                      Variant="Variant.Outlined" />
+                        i++;
+                    }
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddPlayer">Aggiungi Player</MudButton>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+    <MudButton Color="Color.Primary"
+               Variant="Variant.Filled"
+               Disabled="@(_isMultiPlayer && !_isValid)"
+               OnClick="()=>OnStart.InvokeAsync(_players)">Start!</MudButton>
+</MudForm>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public EventCallback<List<Player>?> OnStart { get; set; }
+
+    private bool _isValid;
+
+    private bool _isMultiPlayer = true;
+    private List<Player> _players = [new Player(), new Player()];
+
+    private void AddPlayer() => _players.Add(new Player());
+}

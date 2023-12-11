@@ -1,0 +1,32 @@
+Min: @Limits.Min
+Max: @Limits.Max
+
+<MudTextField Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" />
+
+@code {
+    [Parameter, EditorRequired]
+    public required List<Player>? Players { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Limits Limits { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Func<int, bool> CheckFunc { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<Player> End { get; set; }
+
+    private int _bet;
+
+    private async Task Bet(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            var lost = CheckFunc.Invoke(_bet);
+            if (lost)
+            {
+                await End.InvokeAsync(new Player() { Name = "Peppe" });
+            }
+        }
+    }
+}
