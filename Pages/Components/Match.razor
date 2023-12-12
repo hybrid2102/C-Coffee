@@ -1,11 +1,16 @@
-Min: @Limits.Min
-Max: @Limits.Max
+<Hint Limits="Limits" />
 
-<MudTextField Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" />
+@if (Player is not null)
+{
+    <p>@Player, tocca a te!</p>
+}
+
+<MudTextField Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" InputType="InputType.Number" />
+
 
 @code {
-    [Parameter, EditorRequired]
-    public required List<Player>? Players { get; set; }
+    [Parameter]
+    public Player? Player { get; set; }
 
     [Parameter, EditorRequired]
     public required Limits Limits { get; set; }
