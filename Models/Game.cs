@@ -1,4 +1,5 @@
-﻿using MudBlazor.Interfaces;
+﻿using C_Coffee.Extensions;
+using MudBlazor.Interfaces;
 
 namespace C_Coffee.Models
 {
@@ -14,12 +15,14 @@ namespace C_Coffee.Models
         public Status Status { get; private set; } = Status.New;
 
         public List<Player>? Players { get; private set; }
+        public Player? CurrentPlayer { get; private set; }
 
         public Player? Loser { get; private set; }
 
         public void Start(List<Player>? players = null)
         {
             Players = players;
+            CurrentPlayer = Players?.FirstOrDefault();
             Status = Status.Ongoing;
             Console.WriteLine($"Secret: {_secret}");
         }
@@ -33,7 +36,7 @@ namespace C_Coffee.Models
             return hasLost;
         }
 
-        
+
         public void End(Player loser)
         {
             Loser = loser;
@@ -44,12 +47,19 @@ namespace C_Coffee.Models
             ? (Limits with { Min = bet })
             : (Limits with { Max = bet });
 
+        private void NextPlayer()
+        {
+            if (Players is not null)
+                CurrentPlayer = Players.NextItem(CurrentPlayer);
+        }
+
         public void Continue(int bet)
         {
             NarrowDown(bet);
+            NextPlayer();
         }
 
-        
+
 
     }
 }

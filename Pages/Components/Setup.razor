@@ -27,7 +27,7 @@
     <MudButton Color="Color.Primary"
                Variant="Variant.Filled"
                Disabled="@(_isMultiPlayer && !_isValid)"
-               OnClick="()=>OnStart.InvokeAsync(_players)">Start!</MudButton>
+               OnClick="PrepareAndStart">Start!</MudButton>
 </MudForm>
 
 @code {
@@ -41,4 +41,10 @@
     private List<Player> _players = [new Player(), new Player()];
 
     private void AddPlayer() => _players.Add(new Player());
+
+    private async Task PrepareAndStart()
+    {
+        var players = _isMultiPlayer ? _players : null;
+        await OnStart.InvokeAsync(players);
+    }
 }
