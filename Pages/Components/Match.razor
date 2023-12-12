@@ -5,7 +5,7 @@
     <p>@Player, tocca a te!</p>
 }
 
-<MudTextField Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" InputType="InputType.Number" />
+<MudNumericField @ref="_betField" Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" Min="Limits.Min + 1" Max="Limits.Max - 1" />
 
 
 @code {
@@ -26,6 +26,8 @@
 
     private int _bet;
 
+    private MudNumericField<int>? _betField;
+
     private async Task Bet(KeyboardEventArgs args)
     {
         if (args.Key == "Enter")
@@ -33,12 +35,18 @@
             var lost = CheckFunc.Invoke(_bet);
             if (lost)
             {
-                await OnEnd.InvokeAsync(new Player() { Name = "Peppe" });
+                await OnEnd.InvokeAsync(Player);
             }
             else
             {
+                await _betField!.SelectAsync();
                 await OnContinue.InvokeAsync(_bet);
             }
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

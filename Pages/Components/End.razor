@@ -1,11 +1,18 @@
-<p>@Loser ha perso</p>
+@if (Loser is null)
+{
+    <p>Hai perso!</p>
+}
+else
+{
+    <p>@Loser ha perso!</p>
+}
 
 <MudButton OnClick="OnRestart">Nuova partita</MudButton>
 
 @code
 {
     [Parameter, EditorRequired]
-    public required Player Loser { get; set; }
+    public Player? Loser { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback OnRestart { get; set; }
