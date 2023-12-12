@@ -5,11 +5,11 @@
         break;
 
     case Status.Ongoing:
-        <Match Players="_game.Players" Limits="_game.Limits" CheckFunc="_game.Check" End="_game.End" />
+        <Match Players="_game.Players" Limits="_game.Limits" CheckFunc="_game.Check" OnContinue="_game.Continue" OnEnd="_game.End"  />
         break;
 
     case Status.Ended:
-        <End Loser="_game.Loser" />
+        <End Loser="_game.Loser" OnRestart="Restart" />
         break;
 
     default:
@@ -19,4 +19,6 @@
 
 @code {
     private Game _game = new Game();
+
+    private void Restart() => _game = new Game();
 }

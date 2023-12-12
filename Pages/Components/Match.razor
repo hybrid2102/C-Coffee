@@ -14,7 +14,10 @@ Max: @Limits.Max
     public required Func<int, bool> CheckFunc { get; set; }
 
     [Parameter, EditorRequired]
-    public EventCallback<Player> End { get; set; }
+    public EventCallback<int> OnContinue { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<Player> OnEnd { get; set; }
 
     private int _bet;
 
@@ -25,7 +28,11 @@ Max: @Limits.Max
             var lost = CheckFunc.Invoke(_bet);
             if (lost)
             {
-                await End.InvokeAsync(new Player() { Name = "Peppe" });
+                await OnEnd.InvokeAsync(new Player() { Name = "Peppe" });
+            }
+            else
+            {
+                await OnContinue.InvokeAsync(_bet);
             }
         }
     }

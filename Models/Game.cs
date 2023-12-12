@@ -30,24 +30,26 @@ namespace C_Coffee.Models
 
             var hasLost = bet == _secret;
 
-            if (!hasLost)
-            {
-                NarrowDown(bet);
-            }
-
             return hasLost;
         }
 
-        private void NarrowDown(int bet) => Limits = bet < _secret
-            ? (Limits with { Min = bet })
-            : (Limits with { Max = bet });
-
+        
         public void End(Player loser)
         {
             Loser = loser;
             Status = Status.Ended;
         }
 
+        private void NarrowDown(int bet) => Limits = bet < _secret
+            ? (Limits with { Min = bet })
+            : (Limits with { Max = bet });
+
+        public void Continue(int bet)
+        {
+            NarrowDown(bet);
+        }
+
+        
 
     }
 }
