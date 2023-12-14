@@ -8,7 +8,7 @@ namespace C_Coffee.Models
         private const int _min = 1;
         private const int _max = 1000;
 
-        public readonly int Secret = new Random().Next(_min + 1, _max);
+        public readonly int Secret = new Random().Next(_min, _max+1);
 
         public Limits InitialLimits = new (1, 1000);
 
@@ -45,9 +45,12 @@ namespace C_Coffee.Models
             Status = Status.Ended;
         }
 
-        private void NarrowDown(int bet) => MatchLimits = bet < Secret
+        private void NarrowDown(int bet)
+        {
+            MatchLimits = bet < Secret
             ? (MatchLimits with { Min = bet })
             : (MatchLimits with { Max = bet });
+        }
 
         private void NextPlayer()
         {
