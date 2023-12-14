@@ -9,7 +9,7 @@
     <MudCardContent>
 
         <MudText>
-            @(Loser is null ? "Hai indovinato!" : $"{Loser} ha perso!")
+            @(Loser is null ? "Hai perso!" : $"{Loser} ha perso!")
         </MudText>
 
         <MudText>
@@ -21,15 +21,13 @@
         </MudText>
     </MudCardContent>
     <MudCardActions>
-        <MudContainer MaxWidth="MaxWidth.ExtraSmall">
-            <MudButton Variant="Variant.Filled"
-                       Color="@Color.Primary"
-                       FullWidth="true"
-                       StartIcon="@Icons.Material.Filled.Refresh"
-                       OnClick="OnRestart">
-                Nuova partita
-            </MudButton>
-        </MudContainer>
+        <MudButton Variant="Variant.Filled"
+                   Color="@Color.Primary"
+                   FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Refresh"
+                   OnClick="OnRestart">
+            Nuova partita
+        </MudButton>
     </MudCardActions>
 </MudCard>
 

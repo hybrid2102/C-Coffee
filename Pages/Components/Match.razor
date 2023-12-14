@@ -1,3 +1,5 @@
+@inject IDialogService DialogService;
+
 <MudCard>
     <MudCardHeader>
         <CardHeaderContent>
@@ -15,22 +17,28 @@
             <MudNumericField @ref="_betField"
                              Required="true"
                              Label="Scommetti"
-                             Min="MatchLimits.Min + 1"
-                             Max="MatchLimits.Max - 1"
+                             HelperText="@($"Scegli un numero tra {MatchLimits.Min} e {MatchLimits.Max}")"
+                             Min="MatchLimits.Min"
+                             Max="MatchLimits.Max"
                              @bind-Value=_bet
                              OnKeyUp="OnKeyUp" />
         </MudStack>
     </MudCardContent>
     <MudCardActions>
-        <MudContainer MaxWidth="MaxWidth.ExtraSmall">
+        <MudStack Row="true">
             <MudButton Variant="Variant.Filled"
                        Color="@Color.Primary"
-                       FullWidth="true"
                        StartIcon="@Icons.Material.Filled.Send"
                        OnClick="Bet">
                 Scommetti
             </MudButton>
-        </MudContainer>
+            <MudButton Variant="Variant.Filled"
+                       Color="@Color.Error"
+                       StartIcon="@Icons.Material.Filled.DeleteForever"
+                       OnClick="ConfirmSurrender">
+                Abbandona
+            </MudButton>
+        </MudStack>
     </MudCardActions>
 </MudCard>
 
@@ -51,7 +59,7 @@
     public EventCallback<int> OnContinue { get; set; }
 
     [Parameter, EditorRequired]
-    public EventCallback<Player> OnEnd { get; set; }
+    public EventCallback<Player?> OnEnd { get; set; }
 
     private int _bet;
 
@@ -74,6 +82,14 @@
             await _betField!.SelectAsync();
             await OnContinue.InvokeAsync(_bet);
         }
+    }
+
+    private async Task ConfirmSurrender()
+    {
+        var confirm = await DialogService.ShowMessageBox("Conferma", "Vuoi davvero arrenderti e terminare la partita?", yesText: "Sì", noText: "No");
+
+        if (confirm == true)
+            await OnEnd.InvokeAsync(Player);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
