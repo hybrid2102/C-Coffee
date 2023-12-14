@@ -1,19 +1,48 @@
-<Hint Limits="Limits" />
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">
+                Gioco in corso
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack>
+            <Hint InitialLimits="InitialLimits" MatchLimits="MatchLimits" />
 
-@if (Player is not null)
-{
-    <p>@Player, tocca a te!</p>
-}
+            <PlayerTurn Player="Player" />
 
-<MudNumericField @ref="_betField" Required="true" Label="Scommetti" @bind-Value=_bet OnKeyUp="Bet" Min="Limits.Min + 1" Max="Limits.Max - 1" />
-
+            <MudNumericField @ref="_betField"
+                             Required="true"
+                             Label="Scommetti"
+                             Min="MatchLimits.Min + 1"
+                             Max="MatchLimits.Max - 1"
+                             @bind-Value=_bet
+                             OnKeyUp="OnKeyUp" />
+        </MudStack>
+    </MudCardContent>
+    <MudCardActions>
+        <MudContainer MaxWidth="MaxWidth.ExtraSmall">
+            <MudButton Variant="Variant.Filled"
+                       Color="@Color.Primary"
+                       FullWidth="true"
+                       StartIcon="@Icons.Material.Filled.Send"
+                       OnClick="Bet">
+                Scommetti
+            </MudButton>
+        </MudContainer>
+    </MudCardActions>
+</MudCard>
 
 @code {
     [Parameter]
     public Player? Player { get; set; }
 
     [Parameter, EditorRequired]
-    public required Limits Limits { get; set; }
+    public required Limits InitialLimits { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Limits MatchLimits { get; set; }
 
     [Parameter, EditorRequired]
     public required Func<int, bool> CheckFunc { get; set; }
@@ -28,25 +57,30 @@
 
     private MudNumericField<int>? _betField;
 
-    private async Task Bet(KeyboardEventArgs args)
+    private async Task OnKeyUp(KeyboardEventArgs args)
     {
-        if (args.Key == "Enter")
+        if (args.Key == "Enter") await Bet();
+    }
+
+    private async Task Bet()
+    {
+        var lost = CheckFunc.Invoke(_bet);
+        if (lost)
         {
-            var lost = CheckFunc.Invoke(_bet);
-            if (lost)
-            {
-                await OnEnd.InvokeAsync(Player);
-            }
-            else
-            {
-                await _betField!.SelectAsync();
-                await OnContinue.InvokeAsync(_bet);
-            }
+            await OnEnd.InvokeAsync(Player);
+        }
+        else
+        {
+            await _betField!.SelectAsync();
+            await OnContinue.InvokeAsync(_bet);
         }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender && _betField is not null)
+            await _betField.SelectAsync();
+
         await base.OnAfterRenderAsync(firstRender);
     }
 }

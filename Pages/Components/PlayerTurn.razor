@@ -1,0 +1,17 @@
+﻿@if (Player is not null)
+{
+    <MudText>
+        <MudChip>
+            <AvatarContent>
+                <MudAvatar>@Player.Name?[0..2].ToUpper()</MudAvatar>
+            </AvatarContent>
+            <ChildContent>@Player</ChildContent>
+        </MudChip>
+        tocca a te!
+    </MudText>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public Player? Player { get; set; }
+}
