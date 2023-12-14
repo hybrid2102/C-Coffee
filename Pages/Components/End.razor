@@ -1,16 +1,47 @@
-@if (Loser is null)
-{
-    <p>Hai perso!</p>
-}
-else
-{
-    <p>@Loser ha perso!</p>
-}
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">
+                Fine del gioco
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
 
-<MudButton OnClick="OnRestart">Nuova partita</MudButton>
+        <MudText>
+            @(Loser is null ? "Hai indovinato!" : $"{Loser} ha perso!")
+        </MudText>
+
+        <MudText>
+            Il numero era...
+        </MudText>
+
+        <MudText Typo="Typo.h6">
+            @Secret
+        </MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudContainer MaxWidth="MaxWidth.ExtraSmall">
+            <MudButton Variant="Variant.Filled"
+                       Color="@Color.Primary"
+                       FullWidth="true"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       OnClick="OnRestart">
+                Nuova partita
+            </MudButton>
+        </MudContainer>
+    </MudCardActions>
+</MudCard>
+
+
+
+
 
 @code
 {
+    [Parameter, EditorRequired]
+    public int Secret { get; set; }
+
     [Parameter, EditorRequired]
     public Player? Loser { get; set; }
 

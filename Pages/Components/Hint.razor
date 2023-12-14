@@ -1,7 +1,28 @@
-﻿Min: @Limits.Min
-Max: @Limits.Max
+﻿<MudSlider Disabled="true"
+           TickMarks="true"
+           ValueLabel="true"
+           Step="100"
+           Min="InitialLimits.Min"
+           Max="InitialLimits.Max"
+           Value="MatchLimits.Min" />
+
+<MudSlider Disabled="true"
+           TickMarks="true"
+           ValueLabel="true"
+           Step="100"
+           Min="InitialLimits.Min"
+           Max="InitialLimits.Max"
+           Value="MatchLimits.Max" />
+
+<MudText>
+    Il numero segreto è compreso da @MatchLimits.Min e @MatchLimits.Max (esclusi)
+</MudText>
+
 
 @code {
     [Parameter, EditorRequired]
-    public required Limits Limits { get; set; }
+    public required Limits InitialLimits { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Limits MatchLimits { get; set; }
 }

@@ -8,9 +8,11 @@ namespace C_Coffee.Models
         private const int _min = 1;
         private const int _max = 1000;
 
-        private readonly int? _secret = new Random().Next(_min + 1, _max);
+        public readonly int Secret = new Random().Next(_min + 1, _max);
 
-        public Limits Limits { get; private set; } = new Limits(_min, _max);
+        public Limits InitialLimits = new (1, 1000);
+
+        public Limits MatchLimits { get; private set; } = new Limits(_min, _max);
 
         public Status Status { get; private set; } = Status.New;
 
@@ -24,14 +26,14 @@ namespace C_Coffee.Models
             Players = players;
             CurrentPlayer = Players?.FirstOrDefault();
             Status = Status.Ongoing;
-            Console.WriteLine($"Secret: {_secret}");
+            Console.WriteLine($"Secret: {Secret}");
         }
 
         public bool Check(int bet)
         {
-            if (bet < Limits.Min || bet > Limits.Max) throw new ArgumentOutOfRangeException();
+            if (bet < MatchLimits.Min || bet > MatchLimits.Max) throw new ArgumentOutOfRangeException(nameof(bet));
 
-            var hasLost = bet == _secret;
+            var hasLost = bet == Secret;
 
             return hasLost;
         }
@@ -43,9 +45,9 @@ namespace C_Coffee.Models
             Status = Status.Ended;
         }
 
-        private void NarrowDown(int bet) => Limits = bet < _secret
-            ? (Limits with { Min = bet })
-            : (Limits with { Max = bet });
+        private void NarrowDown(int bet) => MatchLimits = bet < Secret
+            ? (MatchLimits with { Min = bet })
+            : (MatchLimits with { Max = bet });
 
         private void NextPlayer()
         {

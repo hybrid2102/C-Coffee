@@ -1,33 +1,62 @@
 ﻿<MudForm @bind-IsValid="@_isValid">
-    <MudExpansionPanels>
-        <MudExpansionPanel HideIcon="true" @bind-IsExpanded="_isMultiPlayer">
-            <TitleContent>
-                <MudToolBar>
-                    <MudSwitch Color="Color.Primary" @bind-Checked="_isMultiPlayer" Label="Modalità Multiplayer" />
-                </MudToolBar>
-            </TitleContent>
-            <ChildContent>
-                @if (_isMultiPlayer)
-                {
-                    int i = 1;
-                    @foreach (var player in _players)
-                    {
-                        <MudTextField @bind-Value="player.Name"
-                                      Required="true"
-                                      Label="@($"Player #{i}")"
-                                      Variant="Variant.Outlined" />
-                        i++;
-                    }
-                    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddPlayer">Aggiungi Player</MudButton>
-                }
-            </ChildContent>
-        </MudExpansionPanel>
-    </MudExpansionPanels>
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Nuova partita</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
 
-    <MudButton Color="Color.Primary"
-               Variant="Variant.Filled"
-               Disabled="@(_isMultiPlayer && !_isValid)"
-               OnClick="PrepareAndStart">Start!</MudButton>
+        <MudCardContent>
+            <MudExpansionPanels>
+                <MudExpansionPanel HideIcon="true" @bind-IsExpanded="_isMultiPlayer">
+                    <TitleContent>
+                        <MudSwitch Color="Color.Primary" @bind-Checked="_isMultiPlayer" Label="Modalità Multiplayer" />
+                    </TitleContent>
+                    <ChildContent>
+                        @if (_isMultiPlayer)
+                        {
+                            int i = 1;
+                            <MudStack>
+                                @foreach (var player in _players)
+                                {
+                                    <MudTextField @bind-Value="player.Name"
+                                                  Required="true"
+                                                  Label="@($"Player #{i}")"
+                                                  Variant="Variant.Outlined"
+                                                  FullWidth="true"
+                                                  Immediate="true"
+                                                  Adornment="@(i>2?Adornment.End:Adornment.None)"
+                                                  AdornmentIcon="@Icons.Material.Filled.Delete"
+                                                  OnAdornmentClick="()=>_players.Remove(player)" />
+                                    i++;
+                                }
+                                <MudStack Row="true">
+                                    <MudSpacer />
+                                    <MudButton Color="Color.Primary"
+                                               StartIcon="@Icons.Material.Filled.PersonAdd"
+                                               OnClick="AddPlayer">Aggiungi Player</MudButton>
+                                </MudStack>
+                            </MudStack>
+                        }
+                    </ChildContent>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudCardContent>
+
+        <MudCardActions>
+            <MudContainer MaxWidth="MaxWidth.ExtraSmall">
+                <MudButton Color="Color.Primary"
+                           Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.PlayArrow"
+                           FullWidth="true"
+                           Disabled="@(_isMultiPlayer && !_isValid)"
+                           OnClick="PrepareAndStart">
+                    Start!
+                </MudButton>
+            </MudContainer>
+        </MudCardActions>
+
+    </MudCard>
 </MudForm>
 
 @code {
