@@ -1,4 +1,5 @@
 ﻿using C_Coffee.Extensions;
+using Microsoft.Extensions.Logging;
 using MudBlazor.Interfaces;
 
 namespace C_Coffee.Models
@@ -21,17 +22,22 @@ namespace C_Coffee.Models
 
         public Player? Loser { get; private set; }
 
+        public readonly List<string> History = [];
+
         public void Start(List<Player>? players = null)
         {
             Players = players;
             CurrentPlayer = Players?.FirstOrDefault();
             Status = Status.Ongoing;
             Console.WriteLine($"Secret: {Secret}");
+            History.Insert(0, "Il gioco ha inizio!");
         }
 
-        public bool Check(int bet)
+        public bool Check(int bet, Player? player)
         {
             if (bet <= MatchLimits.Min || bet >= MatchLimits.Max) throw new ArgumentOutOfRangeException(nameof(bet));
+
+            History.Insert(0, player is null ? $"Hai scommesso {bet}" : $"{player} ha scommesso {bet}");
 
             var hasLost = bet == Secret;
 
@@ -39,8 +45,10 @@ namespace C_Coffee.Models
         }
 
 
-        public void End(Player loser)
+        public void End(Player? loser)
         {
+            History.Insert(0, loser is null ? "Hai perso!" : $"{loser} ha perso!");
+
             Loser = loser;
             Status = Status.Ended;
         }

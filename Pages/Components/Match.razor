@@ -57,9 +57,14 @@
     </MudCardActions>
 </MudCard>
 
+<History Data="History" />
+
 @code {
     [Parameter]
     public Player? Player { get; set; }
+
+    [Parameter, EditorRequired]
+    public required List<string> History { get; set; }
 
     [Parameter, EditorRequired]
     public required Limits InitialLimits { get; set; }
@@ -71,7 +76,7 @@
     public required int Secret { get; set; }
 
     [Parameter, EditorRequired]
-    public required Func<int, bool> CheckFunc { get; set; }
+    public required Func<int, Player?, bool> CheckFunc { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<int> OnContinue { get; set; }
@@ -90,7 +95,7 @@
 
     private async Task Bet()
     {
-        var lost = CheckFunc.Invoke(_bet);
+        var lost = CheckFunc.Invoke(_bet, Player);
         if (lost)
         {
             await OnEnd.InvokeAsync(Player);

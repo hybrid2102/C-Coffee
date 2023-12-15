@@ -1,0 +1,26 @@
+﻿<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">
+                Cronologia
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTimeline TimelinePosition="TimelinePosition.Left">
+            @foreach (var match in Data)
+            {
+                <MudTimelineItem>
+                    @match
+                </MudTimelineItem>
+            }
+        </MudTimeline>
+    </MudCardContent>
+</MudCard>
+
+
+
+@code {
+    [Parameter, EditorRequired]
+    public required List<string> Data { get; set; }
+}
