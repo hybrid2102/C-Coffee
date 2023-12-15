@@ -1,15 +1,9 @@
 ﻿@if (Player is not null)
 {
     <MudText Typo="Typo.subtitle2">
-        <MudChip>
-            <AvatarContent>
-                <MudAvatar>@Player.Name?[0..2].ToUpper()</MudAvatar>
-                </AvatarContent>
-                <ChildContent>@Player</ChildContent>
-        </MudChip>
+        <PlayerChip Player="Player" />
         è il tuo turno!
     </MudText>
-
 }
 
 @code {

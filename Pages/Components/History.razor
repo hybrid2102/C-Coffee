@@ -1,17 +1,35 @@
 ﻿<MudCard>
     <MudCardHeader>
         <CardHeaderContent>
-            <MudText Typo="Typo.h4">
+            <MudText Typo="Typo.h6">
                 Cronologia
             </MudText>
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
         <MudTimeline TimelinePosition="TimelinePosition.Left">
-            @foreach (var match in Data)
+            @foreach (var e in Events)
             {
                 <MudTimelineItem>
-                    @match
+                    @if (!string.IsNullOrWhiteSpace(e.Message))
+                    {
+                        <MudText>
+                            @e.Message
+                        </MudText>
+                    }
+                    else if (e.Player is null)
+                    {
+                        <MudText>
+                            Hai scommesso @e.Bet
+                        </MudText>
+                    }
+                    else if (e.Bet is not null)
+                    {
+                        <MudText>
+                            <PlayerChip Player="e.Player" />
+                            ha scommesso @e.Bet
+                        </MudText>
+                    }
                 </MudTimelineItem>
             }
         </MudTimeline>
@@ -22,5 +40,5 @@
 
 @code {
     [Parameter, EditorRequired]
-    public required List<string> Data { get; set; }
+    public required List<Event> Events { get; set; }
 }

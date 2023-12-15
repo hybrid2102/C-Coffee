@@ -5,11 +5,7 @@
         break;
 
     case Status.Ongoing:
-        <Match Player="_game.CurrentPlayer"
-               History="_game.History"
-               InitialLimits="_game.InitialLimits"
-               MatchLimits="_game.MatchLimits"
-               Secret="_game.Secret"
+        <Match Game="_game"
                CheckFunc="_game.Check"
                OnContinue="_game.Continue"
                OnEnd="_game.End" />
