@@ -10,35 +10,50 @@
     </MudCardHeader>
     <MudCardContent>
         <MudStack>
-            <Hint InitialLimits="InitialLimits" MatchLimits="MatchLimits" />
-
             <PlayerTurn Player="Player" />
+
+            <Hint InitialLimits="InitialLimits" MatchLimits="MatchLimits" />
 
             <MudNumericField @ref="_betField"
                              Required="true"
                              Label="Scommetti"
-                             HelperText="@($"Scegli un numero tra {MatchLimits.Min} e {MatchLimits.Max}")"
-                             Min="MatchLimits.Min"
-                             Max="MatchLimits.Max"
+                             HelperText="@($"Scegli un numero tra {MatchLimits.Min} e {MatchLimits.Max} (esclusi)")"
+                             Min="@(MatchLimits.Min + 1)"
+                             Max="@(MatchLimits.Max - 1)"
                              @bind-Value=_bet
                              OnKeyUp="OnKeyUp" />
         </MudStack>
     </MudCardContent>
     <MudCardActions>
-        <MudStack Row="true">
-            <MudButton Variant="Variant.Filled"
-                       Color="@Color.Primary"
-                       StartIcon="@Icons.Material.Filled.Send"
-                       OnClick="Bet">
-                Scommetti
-            </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       Color="@Color.Error"
-                       StartIcon="@Icons.Material.Filled.DeleteForever"
-                       OnClick="ConfirmSurrender">
-                Abbandona
-            </MudButton>
-        </MudStack>
+        <MudGrid>
+            <MudItem xs="12" sm="4">
+                <MudButton Variant="Variant.Filled"
+                           Color="@Color.Primary"
+                           FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.Send"
+                           OnClick="Bet">
+                    Scommetti
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="4">
+                <MudButton Variant="Variant.Filled"
+                           Color="@Color.Secondary"
+                           FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.RemoveRedEye"
+                           OnClick="ConfirmPeek">
+                    Sbrircia
+                </MudButton>
+            </MudItem>
+            <MudItem xs="12" sm="4">
+                <MudButton Variant="Variant.Filled"
+                           Color="@Color.Error"
+                           FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.DeleteForever"
+                           OnClick="ConfirmSurrender">
+                    Abbandona
+                </MudButton>
+            </MudItem>
+        </MudGrid>
     </MudCardActions>
 </MudCard>
 
@@ -51,6 +66,9 @@
 
     [Parameter, EditorRequired]
     public required Limits MatchLimits { get; set; }
+
+    [Parameter, EditorRequired]
+    public required int Secret { get; set; }
 
     [Parameter, EditorRequired]
     public required Func<int, bool> CheckFunc { get; set; }
@@ -82,6 +100,13 @@
             await _betField!.SelectAsync();
             await OnContinue.InvokeAsync(_bet);
         }
+    }
+
+    private async Task ConfirmPeek()
+    {
+        var confirm = await DialogService.ShowMessageBox("Conferma", "Vuoi davvero sbirciare il numero segreto?", yesText: "Sì", noText: "No");
+        if (confirm == true)
+            await DialogService.ShowMessageBox($"{Secret}", "Acqua in bocca!");
     }
 
     private async Task ConfirmSurrender()
