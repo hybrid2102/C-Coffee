@@ -8,17 +8,31 @@
     </MudCardHeader>
     <MudCardContent>
 
-        <MudText>
-            @(Loser is null ? "Hai perso!" : $"{Loser} ha perso!")
-        </MudText>
+        <MudStack>
+            <MudText>
+                @if (Loser is null)
+                {
+                    <MudText>
+                        Hai perso!
+                    </MudText>
+                }
+                else
+                {
+                    <MudText>
+                        <PlayerChip Player="Loser" />
+                        ha perso!
+                    </MudText>
+                }
+            </MudText>
 
-        <MudText>
-            Il numero era...
-        </MudText>
+            <MudText>
+                Il numero era...
+            </MudText>
 
-        <MudText Typo="Typo.h6">
-            @Secret
-        </MudText>
+            <MudText Typo="Typo.h6">
+                @Secret
+            </MudText>
+        </MudStack>
     </MudCardContent>
     <MudCardActions>
         <MudButton Variant="Variant.Filled"
