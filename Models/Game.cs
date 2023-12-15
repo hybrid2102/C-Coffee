@@ -8,9 +8,9 @@ namespace C_Coffee.Models
         private const int _min = 1;
         private const int _max = 1000;
 
-        public readonly int Secret = new Random().Next(_min, _max+1);
+        public readonly int Secret = new Random().Next(_min, _max + 1);
 
-        public Limits InitialLimits = new (1, 1000);
+        public Limits InitialLimits = new(1, 1000);
 
         public Limits MatchLimits { get; private set; } = new Limits(_min, _max);
 
@@ -31,7 +31,7 @@ namespace C_Coffee.Models
 
         public bool Check(int bet)
         {
-            if (bet < MatchLimits.Min || bet > MatchLimits.Max) throw new ArgumentOutOfRangeException(nameof(bet));
+            if (bet <= MatchLimits.Min || bet >= MatchLimits.Max) throw new ArgumentOutOfRangeException(nameof(bet));
 
             var hasLost = bet == Secret;
 
@@ -48,8 +48,8 @@ namespace C_Coffee.Models
         private void NarrowDown(int bet)
         {
             MatchLimits = bet < Secret
-            ? (MatchLimits with { Min = bet })
-            : (MatchLimits with { Max = bet });
+                ? (MatchLimits with { Min = bet })
+                : (MatchLimits with { Max = bet });
         }
 
         private void NextPlayer()

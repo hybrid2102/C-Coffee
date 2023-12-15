@@ -5,7 +5,13 @@
         break;
 
     case Status.Ongoing:
-        <Match Player="_game.CurrentPlayer" InitialLimits="_game.InitialLimits" MatchLimits="_game.MatchLimits" CheckFunc="_game.Check" OnContinue="_game.Continue" OnEnd="_game.End" />
+        <Match Player="_game.CurrentPlayer"
+               InitialLimits="_game.InitialLimits"
+               MatchLimits="_game.MatchLimits"
+               Secret="_game.Secret"
+               CheckFunc="_game.Check"
+               OnContinue="_game.Continue"
+               OnEnd="_game.End" />
         break;
 
     case Status.Ended:
