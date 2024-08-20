@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudPopoverProvider/>
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -20,3 +20,18 @@
 		</MudContainer>
 	</MudMainContent>
 </MudLayout>
+
+
+@code {
+	private bool _isDarkMode;
+	private MudThemeProvider? _mudThemeProvider;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender && _mudThemeProvider is not null)
+		{
+			_isDarkMode = await _mudThemeProvider.GetSystemPreference();
+			StateHasChanged();
+		}
+	}
+}
