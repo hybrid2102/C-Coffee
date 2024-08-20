@@ -10,7 +10,10 @@
             <MudExpansionPanels>
                 <MudExpansionPanel HideIcon="true" @bind-Expanded="_isMultiPlayer">
                     <TitleContent>
-                        <MudSwitch Color="Color.Primary" @bind-Value="_isMultiPlayer" Label="Modalità Multiplayer" />
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudSwitch Color="Color.Primary" @bind-Value="_isMultiPlayer" />
+                            <MudText>Modalità Multiplayer</MudText>
+                        </MudStack>
                     </TitleContent>
                     <ChildContent>
                         @if (_isMultiPlayer)
