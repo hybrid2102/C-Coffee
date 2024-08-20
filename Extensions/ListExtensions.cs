@@ -4,7 +4,7 @@
     {
         public static T? NextItem<T>(this List<T> list, T? currentItem)
         {
-            if (list == null) return default;
+            if (list == null || currentItem is null) return default;
 
             var currentIndex = list.IndexOf(currentItem);
             return currentIndex switch

@@ -8,9 +8,9 @@
 
         <MudCardContent>
             <MudExpansionPanels>
-                <MudExpansionPanel HideIcon="true" @bind-IsExpanded="_isMultiPlayer">
+                <MudExpansionPanel HideIcon="true" @bind-Expanded="_isMultiPlayer">
                     <TitleContent>
-                        <MudSwitch Color="Color.Primary" @bind-Checked="_isMultiPlayer" Label="Modalità Multiplayer" />
+                        <MudSwitch Color="Color.Primary" @bind-Value="_isMultiPlayer" Label="Modalità Multiplayer" />
                     </TitleContent>
                     <ChildContent>
                         @if (_isMultiPlayer)
