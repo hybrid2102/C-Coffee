@@ -1,13 +1,17 @@
-﻿<MudAlert Severity="Severity.Info">
-    Scegli un numero tra <strong>@MatchLimits.Min</strong> e <strong>@MatchLimits.Max</strong> (esclusi).
-    @* Il numero segreto è compreso tra <strong>@MatchLimits.Min</strong> e <strong>@MatchLimits.Max</strong> (eclusi) *@
-</MudAlert>
-
+﻿@if (MatchLimits.Max - MatchLimits.Min == 2)
+{
+    <MudAlert Severity="Severity.Warning">
+        Mi sa che il giocatore precedente <strong>t'ha fregato</strong>...
+    </MudAlert>
+}
+else
+{
+    <MudAlert Severity="Severity.Info">
+        Scegli un numero tra <strong>@MatchLimits.Min</strong> e <strong>@MatchLimits.Max</strong> (esclusi).
+    </MudAlert>
+}
 
 @code {
-    [Parameter, EditorRequired]
-    public required Limits InitialLimits { get; set; }
-
     [Parameter, EditorRequired]
     public required Limits MatchLimits { get; set; }
 }

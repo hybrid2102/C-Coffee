@@ -1,4 +1,5 @@
 @inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
 
 <MudStack>
     <MudCard>
@@ -34,7 +35,7 @@
 
                 </MudStack>
 
-                <Hint InitialLimits="Game.InitialLimits" MatchLimits="Game.MatchLimits" />
+                <Hint MatchLimits="Game.MatchLimits" />
 
 
 
@@ -92,10 +93,12 @@
         var lost = CheckFunc.Invoke(_bet, Game.CurrentPlayer);
         if (lost)
         {
+            Snackbar.Add($"Oh no...", Severity.Error);
             await OnEnd.InvokeAsync(Game.CurrentPlayer);
         }
         else
         {
+            Snackbar.Add($"{Game.CurrentPlayer} sei salvo!", Severity.Success);
             await OnContinue.InvokeAsync(_bet);
             await FocusBetField();
         }
