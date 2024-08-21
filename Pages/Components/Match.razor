@@ -11,7 +11,8 @@
         </MudCardHeader>
         <MudCardContent>
             <MudStack>
-                <PlayerTurn Player="Game.CurrentPlayer" />
+                @* <PlayerTurn Player="Game.CurrentPlayer" /> *@
+                <PlayersGroup Players="Game.Players" CurrentPlayer="Game.CurrentPlayer" />
 
                 <MudStack Row="true">
 

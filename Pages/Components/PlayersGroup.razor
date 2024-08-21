@@ -1,0 +1,20 @@
+﻿<MudText>Tocca a <strong>@CurrentPlayer.Name</strong>!</MudText>
+
+<MudStack Row="true">
+    @foreach (var p in Players)
+    {
+        <MudBadge Color="@(p == CurrentPlayer ? Color.Success : Color.Warning)" Overlap="true" Bordered="true">
+            <MudAvatar>
+                <MudImage Src="@($"https://anonymous-animals.azurewebsites.net/avatar/{p.Name}")" />
+            </MudAvatar>
+        </MudBadge>
+    }
+</MudStack>
+@code {
+    [Parameter, EditorRequired]
+    public required List<Player> Players { get; set; }
+
+    [Parameter, EditorRequired]
+    public required Player CurrentPlayer { get; set; }
+
+}
