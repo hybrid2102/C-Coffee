@@ -12,7 +12,10 @@
         <MudCardContent>
             <MudStack>
                 @* <PlayerTurn Player="Game.CurrentPlayer" /> *@
-                <PlayersGroup Players="Game.Players" CurrentPlayer="Game.CurrentPlayer" />
+                @if (Game.Players is not null)
+                {
+                    <PlayersGroup Players="Game.Players" CurrentPlayer="Game.CurrentPlayer" />
+                }
 
                 <MudStack Row="true">
 

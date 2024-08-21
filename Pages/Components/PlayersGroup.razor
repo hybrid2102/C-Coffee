@@ -3,17 +3,9 @@
 <MudStack Row="true" Wrap="Wrap.Wrap">
     @foreach (var p in Players)
     {
-        @if (p == CurrentPlayer)
-        {
-            <MudBadge Color="Color.Warning" Overlap="true" Bordered="true">
-                <PlayerAvatar Player="@p" />
-            </MudBadge>
-        }
-        else
-        {
+        <MudBadge Color="Color.Warning" Overlap="true" Bordered="true" Visible="@(p == CurrentPlayer)">
             <PlayerAvatar Player="@p" />
-        }
-
+        </MudBadge>
     }
 </MudStack>
 @code {

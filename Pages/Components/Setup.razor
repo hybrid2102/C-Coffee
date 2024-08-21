@@ -18,8 +18,10 @@
                     <ChildContent>
                         @if (_isMultiPlayer)
                         {
-                            int i = 1;
                             <MudStack>
+                                @{
+                                    int i = 1;
+                                }
                                 @foreach (var player in _players)
                                 {
                                     <MudStack Row="true" AlignItems="AlignItems.Center">
@@ -28,7 +30,7 @@
 
                                         <MudTextField @bind-Value="player.Name"
                                                       Required="true"
-                                                      Label="@($"Player #{i}")"
+                                                      Label="@($"Player #{i++}")"
                                                       Variant="Variant.Outlined"
                                                       FullWidth="true"
                                                       Immediate="true"
@@ -37,7 +39,6 @@
                                                       AdornmentIcon="@Icons.Material.Filled.Delete"
                                                       OnAdornmentClick="()=>_players.Remove(player)" />
                                     </MudStack>
-                                    i++;
                                 }
                                 <MudStack Row="true">
                                     <MudSpacer />
