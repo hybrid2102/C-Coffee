@@ -22,15 +22,21 @@
                             <MudStack>
                                 @foreach (var player in _players)
                                 {
-                                    <MudTextField @bind-Value="player.Name"
-                                                  Required="true"
-                                                  Label="@($"Player #{i}")"
-                                                  Variant="Variant.Outlined"
-                                                  FullWidth="true"
-                                                  Immediate="true"
-                                                  Adornment="@(i>2?Adornment.End:Adornment.None)"
-                                                  AdornmentIcon="@Icons.Material.Filled.Delete"
-                                                  OnAdornmentClick="()=>_players.Remove(player)" />
+                                    <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                                        <PlayerAvatar Player="@player" />
+
+                                        <MudTextField @bind-Value="player.Name"
+                                                      Required="true"
+                                                      Label="@($"Player #{i}")"
+                                                      Variant="Variant.Outlined"
+                                                      FullWidth="true"
+                                                      Immediate="true"
+                                                      Clearable="true"
+                                                      Adornment="@(i>2?Adornment.End:Adornment.None)"
+                                                      AdornmentIcon="@Icons.Material.Filled.Delete"
+                                                      OnAdornmentClick="()=>_players.Remove(player)" />
+                                    </MudStack>
                                     i++;
                                 }
                                 <MudStack Row="true">

@@ -1,13 +1,19 @@
 ﻿<MudText>Tocca a <strong>@CurrentPlayer.Name</strong>!</MudText>
 
-<MudStack Row="true">
+<MudStack Row="true" Wrap="Wrap.Wrap">
     @foreach (var p in Players)
     {
-        <MudBadge Color="@(p == CurrentPlayer ? Color.Success : Color.Warning)" Overlap="true" Bordered="true">
-            <MudAvatar>
-                <MudImage Src="@($"https://anonymous-animals.azurewebsites.net/avatar/{p.Name}")" />
-            </MudAvatar>
-        </MudBadge>
+        @if (p == CurrentPlayer)
+        {
+            <MudBadge Color="Color.Warning" Overlap="true" Bordered="true">
+                <PlayerAvatar Player="@p" />
+            </MudBadge>
+        }
+        else
+        {
+            <PlayerAvatar Player="@p" />
+        }
+
     }
 </MudStack>
 @code {
