@@ -8,27 +8,37 @@
 
         <MudCardContent>
             <MudExpansionPanels>
-                <MudExpansionPanel HideIcon="true" @bind-IsExpanded="_isMultiPlayer">
+                <MudExpansionPanel HideIcon="true" @bind-Expanded="_isMultiPlayer">
                     <TitleContent>
-                        <MudSwitch Color="Color.Primary" @bind-Checked="_isMultiPlayer" Label="Modalità Multiplayer" />
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudSwitch Color="Color.Primary" @bind-Value="_isMultiPlayer" />
+                            <MudText>Modalità Multiplayer</MudText>
+                        </MudStack>
                     </TitleContent>
                     <ChildContent>
                         @if (_isMultiPlayer)
                         {
-                            int i = 1;
                             <MudStack>
+                                @{
+                                    int i = 1;
+                                }
                                 @foreach (var player in _players)
                                 {
-                                    <MudTextField @bind-Value="player.Name"
-                                                  Required="true"
-                                                  Label="@($"Player #{i}")"
-                                                  Variant="Variant.Outlined"
-                                                  FullWidth="true"
-                                                  Immediate="true"
-                                                  Adornment="@(i>2?Adornment.End:Adornment.None)"
-                                                  AdornmentIcon="@Icons.Material.Filled.Delete"
-                                                  OnAdornmentClick="()=>_players.Remove(player)" />
-                                    i++;
+                                    <MudStack Row="true" AlignItems="AlignItems.Center">
+
+                                        <PlayerAvatar Player="@player" />
+
+                                        <MudTextField @bind-Value="player.Name"
+                                                      Required="true"
+                                                      Label="@($"Player #{i++}")"
+                                                      Variant="Variant.Outlined"
+                                                      FullWidth="true"
+                                                      Immediate="true"
+                                                      Clearable="true"
+                                                      Adornment="@(i>2?Adornment.End:Adornment.None)"
+                                                      AdornmentIcon="@Icons.Material.Filled.Delete"
+                                                      OnAdornmentClick="()=>_players.Remove(player)" />
+                                    </MudStack>
                                 }
                                 <MudStack Row="true">
                                     <MudSpacer />

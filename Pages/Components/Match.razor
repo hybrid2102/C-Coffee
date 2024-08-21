@@ -1,4 +1,5 @@
 @inject IDialogService DialogService;
+@inject ISnackbar Snackbar;
 
 <MudStack>
     <MudCard>
@@ -11,50 +12,54 @@
         </MudCardHeader>
         <MudCardContent>
             <MudStack>
-                <PlayerTurn Player="Game.CurrentPlayer" />
+                @* <PlayerTurn Player="Game.CurrentPlayer" /> *@
+                @if (Game.Players is not null)
+                {
+                    <PlayersGroup Players="Game.Players" CurrentPlayer="Game.CurrentPlayer" />
+                }
 
-                <Hint InitialLimits="Game.InitialLimits" MatchLimits="Game.MatchLimits" />
+                <MudStack Row="true">
 
-                <MudNumericField @ref="_betField"
-                                 Required="true"
-                                 Label="Scommetti"
-                                 HelperText="@($"Scegli un numero tra {Game.MatchLimits.Min} e {Game.MatchLimits.Max} (esclusi)")"
-                                 Min="@(Game.MatchLimits.Min + 1)"
-                                 Max="@(Game.MatchLimits.Max - 1)"
-                                 @bind-Value=_bet
-                                 OnKeyUp="OnKeyUp" />
+                    <MudTextField Variant="Variant.Filled" Margin="Margin.Dense" Disabled="true" Label="Minimo" Value="@Game.MatchLimits.Min" Typo="Typo.h6" />
+
+                    <MudNumericField @ref="_betField"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     Label="Scommetti"
+                                     Min="@(Game.MatchLimits.Min + 1)"
+                                     Max="@(Game.MatchLimits.Max - 1)"
+                                     @bind-Value="_bet"
+                                     OnKeyUp="OnKeyUp" />
+
+                    <MudTextField Variant="Variant.Filled" Margin="Margin.Dense" Disabled="true" Label="Massimo" Value="@Game.MatchLimits.Max" Typo="Typo.h6" />
+
+                </MudStack>
+
+                <Hint MatchLimits="Game.MatchLimits" />
+
+
+
             </MudStack>
         </MudCardContent>
         <MudCardActions>
-            <MudGrid>
-                <MudItem xs="12" sm="4">
-                    <MudButton Variant="Variant.Filled"
-                               Color="@Color.Primary"
-                               FullWidth="true"
-                               StartIcon="@Icons.Material.Filled.Send"
-                               OnClick="Bet">
-                        Scommetti
-                    </MudButton>
-                </MudItem>
-                <MudItem xs="12" sm="4">
-                    <MudButton Variant="Variant.Filled"
-                               Color="@Color.Secondary"
-                               FullWidth="true"
-                               StartIcon="@Icons.Material.Filled.RemoveRedEye"
-                               OnClick="ConfirmPeek">
-                        Sbircia
-                    </MudButton>
-                </MudItem>
-                <MudItem xs="12" sm="4">
-                    <MudButton Variant="Variant.Filled"
-                               Color="@Color.Error"
-                               FullWidth="true"
-                               StartIcon="@Icons.Material.Filled.DeleteForever"
-                               OnClick="ConfirmSurrender">
-                        Abbandona
-                    </MudButton>
-                </MudItem>
-            </MudGrid>
+
+            <MudButtonGroup OverrideStyles="false" FullWidth="true">
+                <MudButton @ref="_betButton"
+                           Variant="Variant.Filled"
+                           Color="@Color.Primary"
+                           FullWidth="true"
+                           StartIcon="@Icons.Material.Filled.Send"
+                           OnClick="Bet">
+                    Scommetti
+                </MudButton>
+
+                <MudMenu Variant="Variant.Filled" Color="@Color.Primary" Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
+                    <MudMenuItem Icon="@Icons.Material.Filled.RemoveRedEye" IconColor="Color.Warning" OnClick="ConfirmPeek">Sbircia</MudMenuItem>
+                    <MudMenuItem Icon="@Icons.Material.Filled.DeleteForever" IconColor="Color.Error" OnClick="ConfirmSurrender">Abbandona</MudMenuItem>
+                </MudMenu>
+            </MudButtonGroup>
+
+
         </MudCardActions>
     </MudCard>
     <History Events="Game.History" />
@@ -76,6 +81,7 @@
     private int _bet;
 
     private MudNumericField<int>? _betField;
+    private MudButton? _betButton;
 
     private async Task OnKeyUp(KeyboardEventArgs args)
     {
@@ -87,13 +93,27 @@
         var lost = CheckFunc.Invoke(_bet, Game.CurrentPlayer);
         if (lost)
         {
+            Snackbar.Add($"Oh no...", Severity.Error);
             await OnEnd.InvokeAsync(Game.CurrentPlayer);
         }
         else
         {
-            await _betField!.SelectAsync();
+            Snackbar.Add($"{Game.CurrentPlayer} sei salvo!", Severity.Success);
             await OnContinue.InvokeAsync(_bet);
+            await FocusBetField();
         }
+    }
+
+    /// <summary>
+    /// Tramite un gioco di focus, permette di riselezionare il campo per la scommessa, aggiornando contemporaneamente il valore al suo interno.
+    /// </summary>
+    /// <returns></returns>
+    private async Task FocusBetField()
+    {
+        await _betButton!.FocusAsync();
+        await _betField!.FocusAsync();
+        await _betButton!.FocusAsync();
+        await _betField!.FocusAsync();
     }
 
     private async Task ConfirmPeek()

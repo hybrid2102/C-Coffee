@@ -1,21 +1,105 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" />
+<MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-	<MudAppBar>
-		<MudLink Href="/" Color="Color.Inherit">
-			<MudText Typo="Typo.h5">C-Coffee</MudText>
-		</MudLink>
-		<MudSpacer />
-		<MudIconButton Icon="@Icons.Material.Filled.Help" Color="Color.Inherit" Href="/help" />
-		<MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Href="/about" />
-	</MudAppBar>
-	<MudMainContent>
-		<MudContainer Class="mt-5">
-			@Body
-		</MudContainer>
-	</MudMainContent>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Coffee" Color="Color.Inherit" Href="/" />
+        <MudLink Href="/" Color="Color.Inherit" Underline="Underline.None">
+            <MudText Typo="Typo.h5">C-Coffee</MudText>
+        </MudLink>
+        <MudSpacer />
+        <MudIconButton Icon="@GetThemeIcon()" Color="Color.Inherit" OnClick="ChangeTheme" />
+        <MudIconButton Icon="@Icons.Material.Filled.Help" Color="Color.Inherit" Href="/help" />
+        <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Href="/about" />
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer Class="mt-5">
+            @Body
+        </MudContainer>
+    </MudMainContent>
 </MudLayout>
+
+
+@code {
+    private bool _isDarkMode;
+    private bool _isSystemMode = false;
+
+    private MudThemeProvider? _mudThemeProvider;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // _isDarkMode = await _mudThemeProvider!.GetSystemPreference();
+            await _mudThemeProvider!.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+    private Task OnSystemPreferenceChanged(bool newValue)
+    {
+        if (_isSystemMode)
+        {
+            _isDarkMode = newValue;
+            StateHasChanged();
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private string GetThemeIcon()
+    {
+        if (_isSystemMode)
+        {
+            return Icons.Material.Filled.LightMode;
+        }
+        if (_isDarkMode)
+        {
+            return Icons.Material.Outlined.AutoMode;
+        }
+        return Icons.Material.Outlined.DarkMode;
+    }
+
+    private async Task ChangeTheme()
+    {
+        if (_isSystemMode)
+        {
+            _isSystemMode = false;
+            _isDarkMode = false;
+        }
+        else if (_isDarkMode)
+        {
+            _isSystemMode = true;
+            _isDarkMode = await _mudThemeProvider!.GetSystemPreference();
+        }
+        else
+        {
+            _isDarkMode = true;
+        }
+    }
+
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                AppbarBackground = Colors.Brown.Default,
+                Primary = Colors.Brown.Default,
+                Secondary = Colors.Brown.Lighten2,
+            },
+            PaletteDark = new PaletteDark()
+            {
+                AppbarBackground = Colors.Brown.Darken2,
+                Primary = Colors.Brown.Darken2,
+                Secondary = Colors.Brown.Lighten2,
+            },
+
+            // LayoutProperties = new LayoutProperties()
+            // {
+            //     DrawerWidthLeft = "260px",
+            //     DrawerWidthRight = "300px"
+            // }
+        };
+}

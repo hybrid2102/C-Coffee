@@ -1,8 +1,9 @@
-﻿<MudChip>
+﻿<MudChip T="string" Size="Size.Large">
     <AvatarContent>
-        <MudAvatar>@Player.Name?[0..2].ToUpper()</MudAvatar>
-        </AvatarContent>
-        <ChildContent>@Player</ChildContent>
+        @* <MudAvatar>@Player.Name?[0..2].ToUpper()</MudAvatar> *@
+       <PlayerAvatar Player="@Player" />
+    </AvatarContent>
+    <ChildContent>@Player</ChildContent>
 </MudChip>
 @code {
     [Parameter, EditorRequired]

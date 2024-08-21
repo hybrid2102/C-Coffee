@@ -1,0 +1,16 @@
+﻿<MudAvatar Color="Color.Secondary">
+    @if (string.IsNullOrEmpty(Player.Name))
+    {
+        <MudIcon Icon="@Icons.Material.Filled.QuestionMark" />
+    }
+    else
+    {
+        <MudImage Src="@($"https://anonymous-animals.azurewebsites.net/avatar/{Player.Name}")" />
+    }
+</MudAvatar>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public required Player Player { get; set; }
+}
