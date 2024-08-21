@@ -39,7 +39,8 @@
         <MudCardActions>
 
             <MudButtonGroup OverrideStyles="false" FullWidth="true">
-                <MudButton Variant="Variant.Filled"
+                <MudButton @ref="_betButton"
+                           Variant="Variant.Filled"
                            Color="@Color.Primary"
                            FullWidth="true"
                            StartIcon="@Icons.Material.Filled.Send"
@@ -75,6 +76,7 @@
     private int _bet;
 
     private MudNumericField<int>? _betField;
+    private MudButton? _betButton;
 
     private async Task OnKeyUp(KeyboardEventArgs args)
     {
@@ -90,9 +92,21 @@
         }
         else
         {
-            await _betField!.SelectAsync();
             await OnContinue.InvokeAsync(_bet);
+            await FocusBetField();
         }
+    }
+
+    /// <summary>
+    /// Tramite un gioco di focus, permette di riselezionare il campo per la scommessa, aggiornando contemporaneamente il valore al suo interno.
+    /// </summary>
+    /// <returns></returns>
+    private async Task FocusBetField()
+    {
+        await _betButton!.FocusAsync();
+        await _betField!.FocusAsync();
+        await _betButton!.FocusAsync();
+        await _betField!.FocusAsync();
     }
 
     private async Task ConfirmPeek()
