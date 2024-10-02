@@ -48,6 +48,7 @@
                            Variant="Variant.Filled"
                            Color="@Color.Primary"
                            FullWidth="true"
+                           Disabled="@(_bet is null)"
                            StartIcon="@Icons.Material.Filled.Send"
                            OnClick="Bet">
                     Scommetti
@@ -78,9 +79,9 @@
     [Parameter, EditorRequired]
     public EventCallback<Player?> OnEnd { get; set; }
 
-    private int _bet;
+    private int? _bet;
 
-    private MudNumericField<int>? _betField;
+    private MudNumericField<int?>? _betField;
     private MudButton? _betButton;
 
     private async Task OnKeyUp(KeyboardEventArgs args)
@@ -90,7 +91,9 @@
 
     private async Task Bet()
     {
-        var lost = CheckFunc.Invoke(_bet, Game.CurrentPlayer);
+        if (_bet is null) return;
+
+        var lost = CheckFunc.Invoke(_bet.Value, Game.CurrentPlayer);
         if (lost)
         {
             Snackbar.Add($"Oh no...", Severity.Error);
@@ -99,7 +102,8 @@
         else
         {
             Snackbar.Add($"{Game.CurrentPlayer} sei salvo!", Severity.Success);
-            await OnContinue.InvokeAsync(_bet);
+            await OnContinue.InvokeAsync(_bet.Value);
+            _bet = null;
             await FocusBetField();
         }
     }
