@@ -37,7 +37,7 @@
                                                       Clearable="true"
                                                       Adornment="@(i>2?Adornment.End:Adornment.None)"
                                                       AdornmentIcon="@Icons.Material.Filled.Delete"
-                                                      OnAdornmentClick="()=>_players.Remove(player)" />
+                                                      OnAdornmentClick="()=>_players.Remove(player)" AutoFocus="@(_players.Count > 2)" />
                                     </MudStack>
                                 }
                                 <MudStack Row="true">
