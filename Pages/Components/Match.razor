@@ -55,7 +55,7 @@
                 </MudButton>
 
                 <MudMenu Variant="Variant.Filled" Color="@Color.Primary" Icon="@Icons.Material.Filled.ArrowDropDown" Style="align-self: auto;">
-                    <MudMenuItem Icon="@Icons.Material.Filled.RemoveRedEye" IconColor="Color.Warning" OnClick="ConfirmPeek">Sbircia</MudMenuItem>
+                    <MudMenuItem Icon="@Icons.Material.Filled.RemoveRedEye" IconColor="Color.Warning" Disabled="@(Game.Players is not null)" OnClick="ConfirmPeek">Sbircia</MudMenuItem>
                     <MudMenuItem Icon="@Icons.Material.Filled.DeleteForever" IconColor="Color.Error" OnClick="ConfirmSurrender">Abbandona</MudMenuItem>
                 </MudMenu>
             </MudButtonGroup>
